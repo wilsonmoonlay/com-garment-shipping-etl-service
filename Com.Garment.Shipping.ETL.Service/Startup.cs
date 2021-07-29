@@ -1,9 +1,10 @@
 using System;
-using Com.DyeingPrinting.ETL.Service.Helpers;
+using Com.Garment.Shipping.ETL.Service.Helpers;
 using Com.Garment.Shipping.ETL.Service.Models;
 using Com.Garment.Shipping.ETL.Service.DBAdapters;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
+using Com.Garment.Shipping.ETL.Service.Services;
 
 [assembly: FunctionsStartup(typeof(Com.Garment.Shipping.ETL.Service.Startup))]
 namespace Com.Garment.Shipping.ETL.Service
@@ -26,7 +27,9 @@ namespace Com.Garment.Shipping.ETL.Service
                 });
             
             builder.Services.AddTransient<IGShippingLocalAdapter, GShippingLocalAdapter>()
-                .AddTransient<IGShippingExportAdapter, GShippingExportAdapter>();
+                .AddTransient<IGShippingExportAdapter, GShippingExportAdapter>()
+                .AddTransient<IGShippingExportService, GShippingExportService>()
+                .AddTransient<IGShippingLocalService, GShippingLocalService>();
         }
     }
 }

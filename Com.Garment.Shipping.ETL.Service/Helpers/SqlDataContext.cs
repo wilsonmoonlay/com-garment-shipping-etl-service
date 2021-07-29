@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Com.DyeingPrinting.ETL.Service.Helpers
+namespace Com.Garment.Shipping.ETL.Service.Helpers
 {
     public class SqlDataContext<TModel> : ISqlDataContext<TModel>
     {
@@ -22,15 +22,15 @@ namespace Com.DyeingPrinting.ETL.Service.Helpers
 
         public async Task<int> ExecuteAsync(string query, IEnumerable<TModel> models)
         {
-            if(_connectionOrigin.State != ConnectionState.Open)
-                _connectionOrigin.Open(); 
+            if(_connectionDestination.State != ConnectionState.Open)
+                _connectionDestination.Open(); 
             
-            var transaction = _connectionOrigin.BeginTransaction();
-            var result = await _connectionOrigin.ExecuteAsync(query, models, transaction : transaction);
+            var transaction = _connectionDestination.BeginTransaction();
+            var result = await _connectionDestination.ExecuteAsync(query, models, transaction : transaction);
             transaction.Commit();
 
-            if(_connectionOrigin.State == ConnectionState.Open)
-                _connectionOrigin.Close();
+            if(_connectionDestination.State == ConnectionState.Open)
+                _connectionDestination.Close();
             return result;
         }
 
@@ -43,20 +43,6 @@ namespace Com.DyeingPrinting.ETL.Service.Helpers
             var transaction = _connectionOrigin.BeginTransaction();
             var result = await _connectionOrigin.QueryAsync<TModel>(query, transaction : transaction);
             _connectionOrigin.Close();
-
-            if(_connectionOrigin.State == ConnectionState.Open)
-                _connectionOrigin.Close();
-            return result;
-        }
-
-        public async Task<IEnumerable<TModel>> QueryAsync(string query, Object newObject)
-        {
-            if(_connectionOrigin.State == ConnectionState.Closed)
-                _connectionOrigin.Open(); 
-            
-            var transaction = _connectionOrigin.BeginTransaction();
-            var result = await _connectionOrigin.QueryAsync<TModel>(query, newObject, transaction : transaction);
-            transaction.Commit();
 
             if(_connectionOrigin.State == ConnectionState.Open)
                 _connectionOrigin.Close();
@@ -78,6 +64,5 @@ namespace Com.DyeingPrinting.ETL.Service.Helpers
     {
         Task<int> ExecuteAsync(string query, IEnumerable<TModel> model);
         Task<IEnumerable<TModel>> QueryAsync(string query);
-        Task<IEnumerable<TModel>> QueryAsync(string query, Object newObject);
     }
 }

@@ -4,16 +4,21 @@ using Com.Garment.Shipping.ETL.Service.Models;
 
 namespace Com.Garment.Shipping.ETL.Service.Services
 {
-    public class GShippingExport : IBaseService<GShippingExportModel>
+    public class GShippingLocalService : IGShippingLocalService
     {
-        public Task<IEnumerable<GShippingExportModel>> Get()
+        public Task<IEnumerable<GShippingLocalModel>> Get()
         {
             throw new System.NotImplementedException();
         }
 
-        public Task Save(IEnumerable<GShippingExportModel> data)
+        public Task Save(IEnumerable<GShippingLocalModel> data)
         {
             throw new System.NotImplementedException();
         }
+    }
+
+    public interface IGShippingLocalService  : IBaseService<GShippingLocalModel>
+    {
+        
     }
 }

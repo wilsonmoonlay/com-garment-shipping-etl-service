@@ -1,20 +1,34 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Com.Garment.Shipping.ETL.Service.Helpers;
 using Com.Garment.Shipping.ETL.Service.Models;
 using Com.Garment.Shipping.ETL.Service.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Com.Garment.Shipping.ETL.Service.DBAdapters
 {
     public class GShippingLocalAdapter : IGShippingLocalAdapter
     {
-        public Task GetData(IEnumerable<GShippingLocalModel> models)
+        private readonly ISqlDataContext<GShippingLocalModel> context;
+        public GShippingLocalAdapter(IServiceProvider service)
         {
-            throw new System.NotImplementedException();
+            context = service.GetService<ISqlDataContext<GShippingLocalModel>>();
         }
 
-        public Task LoadData(IEnumerable<GShippingLocalModel> models)
+
+        public async Task<IEnumerable<GShippingLocalModel>> GetData()
         {
-            throw new System.NotImplementedException();
+            var query = $"SELECT a.Id,a.NoteNo,a.Date,a.BuyerCode,a.BuyerName,b.LocalSalesNoteId,b.Quantity,b.UomUnit,b.Price,b.Quantity*b.Price as Amount from GarmentShippingLocalSalesNotes as a join GarmentShippingLocalSalesNoteItems as b on a.Id=b.LocalSalesNoteId where a.IsDeleted=0 and b.IsDeleted=0 order by a.Date,a.NoteNo";
+            var result = await context.QueryAsync(query);
+            return result.ToList();
+        }
+
+        public async Task LoadData(IEnumerable<GShippingLocalModel> models)
+        {
+            var query = $"INSERT INTO  [dbo].[GShippingLocal] ([Id],[NoteNo],[Date],[BuyerCode],[BuyerName],[LocalSalesNoteId],[Quantity],[UomUnit],[Price],[Amount]) Values (@Id ,@NoteNo ,@Date ,@BuyerCode ,@BuyerName ,@LocalSalesNoteId ,@Quantity ,@UomUnit ,@Price ,@Amount )";
+            await context.ExecuteAsync(query, models);
         }
     }
 

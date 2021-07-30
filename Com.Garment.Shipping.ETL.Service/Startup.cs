@@ -11,8 +11,8 @@ namespace Com.Garment.Shipping.ETL.Service
 {
     public class Startup : FunctionsStartup
     {        
-        private readonly string connectionStringOrigin = Environment.GetEnvironmentVariable("ConnectionStrings:SQLConnectionString", EnvironmentVariableTarget.Process);
-        private readonly string connectionStringDestination = Environment.GetEnvironmentVariable("ConnectionStrings:SQLConnectionString", EnvironmentVariableTarget.Process);
+        private readonly string connectionStringOrigin = Environment.GetEnvironmentVariable("ConnectionStrings:SQLConnectionStringOrigin", EnvironmentVariableTarget.Process);
+        private readonly string connectionStringDestination = Environment.GetEnvironmentVariable("ConnectionStrings:SQLConnectionStringDestination", EnvironmentVariableTarget.Process);
 
         public override void Configure(IFunctionsHostBuilder builder)
         {

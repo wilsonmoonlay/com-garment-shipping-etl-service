@@ -8,7 +8,7 @@ using Com.Garment.Shipping.ETL.Service.ViewModels;
 
 namespace Com.Garment.Shipping.ETL.Service.Services
 {
-    public class DWH
+    public class DWHService
     {
         static string RESOURCE_URL = Environment.GetEnvironmentVariable("RESOURCE_URL", EnvironmentVariableTarget.Process);
         static string SUBSCRIPTION_ID = Environment.GetEnvironmentVariable("SUBSCRIPTION_ID", EnvironmentVariableTarget.Process);
@@ -16,7 +16,7 @@ namespace Com.Garment.Shipping.ETL.Service.Services
         static string DWH_NAME = Environment.GetEnvironmentVariable("DWH_NAME", EnvironmentVariableTarget.Process);
         string token;
         ILogger log;
-        public DWH(ILogger logger, string tokens) {
+        public DWHService(ILogger logger, string tokens) {
             log = logger;
             token = tokens;
         }

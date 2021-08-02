@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Com.Garment.Shipping.ETL.Service.Helpers
+
 {
     public class SqlDataContext<TModel> : ISqlDataContext<TModel>
     {

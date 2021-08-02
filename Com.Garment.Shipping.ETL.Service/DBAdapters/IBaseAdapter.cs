@@ -5,7 +5,7 @@ namespace Com.Garment.Shipping.ETL.Service.DBAdapters
 {
     public interface IBaseAdapter<TModel>
     {
-        Task GetData(IEnumerable<TModel> models);
+        Task<IEnumerable<TModel>> GetData();
         Task LoadData(IEnumerable<TModel> models);
     }
 }

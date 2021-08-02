@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Com.Garment.Shipping.ETL.Service.Services
 {
-    public class Authentication
+    public class AuthenticationService
     {
         static string AUTH_URL = Environment.GetEnvironmentVariable("AUTH_URL", EnvironmentVariableTarget.Process);
         static string RESOURCE_URL = Environment.GetEnvironmentVariable("RESOURCE_URL", EnvironmentVariableTarget.Process);
@@ -19,7 +19,7 @@ namespace Com.Garment.Shipping.ETL.Service.Services
         static string GRANT_TYPE = "client_credentials";
         ILogger log;
 
-        public Authentication(ILogger logger) {
+        public AuthenticationService(ILogger logger) {
             log = logger;
         }
 

@@ -22,7 +22,7 @@ namespace Com.Garment.Shipping.ETL.Service.Services
 
         public async Task<IEnumerable<GShippingExportModel>> Get()
         {
-            var result = await _gShippingExportAdapter.GetData();
+            var result = await _gShippingExportAdapter.Get();
             return result;
         }
 
@@ -30,7 +30,7 @@ namespace Com.Garment.Shipping.ETL.Service.Services
         {
             try
             {
-                await _gShippingExportAdapter.LoadData(data);
+                await _gShippingExportAdapter.Save(data);
             }
             catch (Exception Ex)
             {

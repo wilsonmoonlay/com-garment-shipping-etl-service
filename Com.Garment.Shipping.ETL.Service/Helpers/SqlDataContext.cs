@@ -35,6 +35,20 @@ namespace Com.Garment.Shipping.ETL.Service.Helpers
             return result;
         }
 
+        public async Task<int> ExecuteAsync(string query, TModel model)
+        {
+            if(_connectionOrigin.State != ConnectionState.Open)
+                _connectionOrigin.Open(); 
+            
+            var transaction = _connectionOrigin.BeginTransaction();
+            var result = await _connectionOrigin.ExecuteAsync(query, model,  transaction : transaction);
+            transaction.Commit();
+
+            if(_connectionOrigin.State == ConnectionState.Open)
+                _connectionOrigin.Close();
+            return result;
+        }
+
         public async Task<IEnumerable<TModel>> QueryAsync(string query)
         {
             if(_connectionOrigin.State == ConnectionState.Closed)
@@ -64,6 +78,7 @@ namespace Com.Garment.Shipping.ETL.Service.Helpers
     public interface ISqlDataContext<TModel>
     {
         Task<int> ExecuteAsync(string query, IEnumerable<TModel> model);
+        Task<int> ExecuteAsync(string query, TModel model);
         Task<IEnumerable<TModel>> QueryAsync(string query);
     }
 }

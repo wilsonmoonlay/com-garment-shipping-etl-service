@@ -7,5 +7,6 @@ namespace Com.Garment.Shipping.ETL.Service.DBAdapters
     {
         Task<IEnumerable<TModel>> GetData();
         Task LoadData(IEnumerable<TModel> models);
+        Task Truncate(IEnumerable<TModel> models);
     }
 }

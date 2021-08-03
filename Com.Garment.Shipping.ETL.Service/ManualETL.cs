@@ -46,25 +46,29 @@ namespace Com.Garment.Shipping.ETL.Service
                 //Get and Insert to Export
                 var result = await _gShippingExportService.Get();
 
-                var listData = new List<GShippingExportModel>();
-                foreach (var exportData in result)
-                {
-                    listData.Add(new GShippingExportModel(
-                        exportData.IdPackingLists, exportData.InvoiceNo, exportData.TruckingDate, exportData.BuyerAgentCode, exportData.BuyerAgentName, exportData.Destination, exportData.SectionCode, exportData.PackingListId, exportData.IdShippingInvoice, exportData.GarmentShippingInvoiceId, exportData.BuyerBrandName, exportData.ComodityCode, exportData.ComodityName, exportData.UnitCode, exportData.Quantity, exportData.UomUnit, exportData.CMTPrice, exportData.Amount));
-                }
+                //var listData = new List<GShippingExportModel>();
+                //foreach (var exportData in result)
+                //{
+                //    listData.Add(new GShippingExportModel(
+                //        exportData.IdPackingLists, exportData.InvoiceNo, exportData.TruckingDate, exportData.BuyerAgentCode, exportData.BuyerAgentName, exportData.Destination, exportData.SectionCode, exportData.PackingListId, exportData.IdShippingInvoice, exportData.GarmentShippingInvoiceId, exportData.BuyerBrandName, exportData.ComodityCode, exportData.ComodityName, exportData.UnitCode, exportData.Quantity, exportData.UomUnit, exportData.CMTPrice, exportData.Amount));
+                //}
 
-                await _gShippingExportService.Save(listData);
+                await _gShippingExportService.ClearData(result);
+
+                await _gShippingExportService.Save(result);
 
                 //Get and Insert to Local
                 var resultLocal = await _gShippingLocalService.Get();
 
+                await _gShippingLocalService.ClearData(resultLocal);
+
                 var listDataLocal = new List<GShippingLocalModel>();
-                foreach (var localData in resultLocal)
-                {
-                    listDataLocal.Add(new GShippingLocalModel(
-                        localData.Id, localData.NoteNo, localData.Date, localData.BuyerCode, localData.BuyerName, localData.LocalSalesNoteId, localData.Quantity, localData.UomUnit, localData.Price, localData.Amount
-                        ));
-                }
+                //foreach (var localData in resultLocal)
+                //{
+                //    listDataLocal.Add(new GShippingLocalModel(
+                //        localData.Id, localData.NoteNo, localData.Date, localData.BuyerCode, localData.BuyerName, localData.LocalSalesNoteId, localData.Quantity, localData.UomUnit, localData.Price, localData.Amount
+                //        ));
+                //}
 
                 await _gShippingLocalService.Save(resultLocal);
 

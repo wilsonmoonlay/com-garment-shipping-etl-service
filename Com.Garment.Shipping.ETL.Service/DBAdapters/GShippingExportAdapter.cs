@@ -37,6 +37,12 @@ namespace Com.Garment.Shipping.ETL.Service.DBAdapters
             var query = $"Insert Into [dbo].[GShippingExport]  ([IdPackingLists],[InvoiceNo],[TruckingDate],[BuyerAgentCode],[BuyerAgentName],[Destination],[SectionCode],[PackingListId],[IdShippingInvoices],[GarmentShippingInvoiceId],[BuyerBrandName],[ComodityCode],[ComodityName],[UnitCode],[Quantity],[UomUnit],[CMTPrice],[Amount]) VALUES ( @IdPackingLists ,@InvoiceNo ,@TruckingDate ,@BuyerAgentCode ,@BuyerAgentName ,@Destination ,@SectionCode ,@PackingListId ,@IdShippingInvoice ,@GarmentShippingInvoiceId ,@BuyerBrandName ,@ComodityCode ,@ComodityName ,@UnitCode ,@Quantity ,@UomUnit ,@CMTPrice ,@Amount)";
             await context.ExecuteAsync(query, models);
         }
+
+        public async Task Truncate(IEnumerable<GShippingExportModel> models)
+        {
+            var query = $"truncate table [dbo].[GShippingExport]";
+            await context.ExecuteAsync(query, models);
+        }
     }
 
     public interface IGShippingExportAdapter : IBaseAdapter<GShippingExportModel>

@@ -14,6 +14,13 @@ namespace Com.Garment.Shipping.ETL.Service.Services
         {
             _gShippingLocalAdapter = service.GetService<IGShippingLocalAdapter>();
         }
+
+
+        public async Task ClearData(IEnumerable<GShippingLocalModel> data)
+        {
+            await _gShippingLocalAdapter.Truncate(data);
+        }
+
         public async Task<IEnumerable<GShippingLocalModel>> Get()
         {
             var result = await _gShippingLocalAdapter.GetData();

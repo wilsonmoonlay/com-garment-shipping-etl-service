@@ -14,6 +14,12 @@ namespace Com.Garment.Shipping.ETL.Service.Services
         {
             _gShippingExportAdapter = service.GetService<IGShippingExportAdapter>();
         }
+        
+        public async Task ClearData(IEnumerable<GShippingExportModel> data)
+        {
+            await _gShippingExportAdapter.Truncate(data);
+        }
+
         public async Task<IEnumerable<GShippingExportModel>> Get()
         {
             var result = await _gShippingExportAdapter.GetData();

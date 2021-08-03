@@ -29,6 +29,12 @@ namespace Com.Garment.Shipping.ETL.Service.DBAdapters
         {
             var query = $"INSERT INTO  [dbo].[GShippingLocal] ([Id],[NoteNo],[Date],[BuyerCode],[BuyerName],[LocalSalesNoteId],[Quantity],[UomUnit],[Price],[Amount]) Values (@Id ,@NoteNo ,@Date ,@BuyerCode ,@BuyerName ,@LocalSalesNoteId ,@Quantity ,@UomUnit ,@Price ,@Amount )";
             await context.ExecuteAsync(query, models);
+        }      
+
+        public async Task Truncate(IEnumerable<GShippingLocalModel> models)
+        {
+            var query = $"truncate table [dbo].[GShippingLocal]";
+            await context.ExecuteAsync(query, models);
         }
     }
 

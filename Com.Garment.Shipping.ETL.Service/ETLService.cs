@@ -28,9 +28,11 @@ namespace Com.Garment.Shipping.ETL.Service
         public async Task StartETL(){
             try{
                 var result = await _gShippingExportService.Get();
+                await _gShippingExportService.ClearData(result);
                 await _gShippingExportService.Save(result);
                 
                 var resultLocal = await _gShippingLocalService.Get();
+                await _gShippingLocalService.Save(resultLocal);
                 await _gShippingLocalService.Save(resultLocal);
             }catch(Exception ex){
                 throw ex;
@@ -88,7 +90,7 @@ namespace Com.Garment.Shipping.ETL.Service
                 status
             );
              
-                await _logingETLService.Save(data);
+            await _logingETLService.Save(data);
         }
     }
     public interface IETLService{

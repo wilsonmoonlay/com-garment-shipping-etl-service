@@ -16,7 +16,7 @@ namespace Com.Garment.Shipping.ETL.Service.DBAdapters
         {
             context = service.GetService<ISqlDataContext<GShippingExportModel>>();
         }
-        public async Task<IEnumerable<GShippingExportModel>> GetData()
+        public async Task<IEnumerable<GShippingExportModel>> Get()
         {
             try
             {
@@ -32,7 +32,7 @@ namespace Com.Garment.Shipping.ETL.Service.DBAdapters
             }
         }
 
-        public async Task LoadData(IEnumerable<GShippingExportModel> models)
+        public async Task Save(IEnumerable<GShippingExportModel> models)
         {
             var query = $"Insert Into [dbo].[GShippingExport]  ([IdPackingLists],[InvoiceNo],[TruckingDate],[BuyerAgentCode],[BuyerAgentName],[Destination],[SectionCode],[PackingListId],[IdShippingInvoices],[GarmentShippingInvoiceId],[BuyerBrandName],[ComodityCode],[ComodityName],[UnitCode],[Quantity],[UomUnit],[CMTPrice],[Amount]) VALUES ( @IdPackingLists ,@InvoiceNo ,@TruckingDate ,@BuyerAgentCode ,@BuyerAgentName ,@Destination ,@SectionCode ,@PackingListId ,@IdShippingInvoice ,@GarmentShippingInvoiceId ,@BuyerBrandName ,@ComodityCode ,@ComodityName ,@UnitCode ,@Quantity ,@UomUnit ,@CMTPrice ,@Amount)";
             await context.ExecuteAsync(query, models);

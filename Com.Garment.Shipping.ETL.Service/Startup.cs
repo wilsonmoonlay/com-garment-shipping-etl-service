@@ -24,12 +24,25 @@ namespace Com.Garment.Shipping.ETL.Service
                 .AddSingleton<ISqlDataContext<GShippingLocalModel>>((s) =>
                 {
                     return new SqlDataContext<GShippingLocalModel>(connectionStringOrigin, connectionStringDestination);
+                })
+                .AddSingleton<ISqlDataContext<LogingDWHModel>>((s) =>
+                {
+                    return new SqlDataContext<LogingDWHModel>(connectionStringOrigin, connectionStringDestination);
+                })
+                .AddSingleton<ISqlDataContext<LogingETLModel>>((s) =>
+                {
+                    return new SqlDataContext<LogingETLModel>(connectionStringOrigin, connectionStringDestination);
                 });
             
             builder.Services.AddTransient<IGShippingLocalAdapter, GShippingLocalAdapter>()
                 .AddTransient<IGShippingExportAdapter, GShippingExportAdapter>()
+                .AddTransient<ILogingETLAdapter, LogingETLAdapter>()
+                .AddTransient<ILogingDWHAdapter, LogingDWHAdapter>()
                 .AddTransient<IGShippingExportService, GShippingExportService>()
-                .AddTransient<IGShippingLocalService, GShippingLocalService>();
+                .AddTransient<IGShippingLocalService, GShippingLocalService>()
+                .AddTransient<ILogingDWHService, LogingDWHService>()
+                .AddTransient<ILogingETLService, LogingETLService>()
+                .AddTransient<IETLService, ETLService>();
         }
     }
 }

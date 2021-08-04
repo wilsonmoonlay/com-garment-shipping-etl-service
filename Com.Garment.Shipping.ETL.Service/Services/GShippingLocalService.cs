@@ -23,7 +23,7 @@ namespace Com.Garment.Shipping.ETL.Service.Services
 
         public async Task<IEnumerable<GShippingLocalModel>> Get()
         {
-            var result = await _gShippingLocalAdapter.GetData();
+            var result = await _gShippingLocalAdapter.Get();
             return result;
         }
 
@@ -31,7 +31,7 @@ namespace Com.Garment.Shipping.ETL.Service.Services
         {
             try
             {
-                await _gShippingLocalAdapter.LoadData(data);
+                await _gShippingLocalAdapter.Save(data);
             }
             catch (Exception ex)
             {

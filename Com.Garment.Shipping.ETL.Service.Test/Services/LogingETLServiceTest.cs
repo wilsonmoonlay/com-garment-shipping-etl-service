@@ -65,7 +65,7 @@ namespace Com.Garment.Shipping.ETL.Service.Test.Services
             serviceProvider.Setup(x => x.GetService(typeof(ILogingETLAdapter))).Returns(new LogingETLAdapter(serviceProvider.Object));
 
             LogingETLService service = new LogingETLService(serviceProvider.Object);
-            var result = await service.Get(1, 1, string.Empty);
+            var result = await service.Get(1, 1, string.Empty, string.Empty);
             Assert.True(result.Count() > 0);
         }
     }

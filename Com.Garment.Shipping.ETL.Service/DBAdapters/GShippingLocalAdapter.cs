@@ -33,8 +33,8 @@ namespace Com.Garment.Shipping.ETL.Service.DBAdapters
 
         public async Task Truncate(IEnumerable<GShippingLocalModel> models)
         {
-            var query = $"truncate table [dbo].[GShippingLocal]";
-            await context.ExecuteAsync(query, models);
+            var query = $"TRUNCATE TABLE [dbo].[GShippingLocal]";
+            await context.ExecuteAsyncTruncate(query);
         }
     }
 

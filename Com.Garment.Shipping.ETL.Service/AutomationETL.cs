@@ -7,74 +7,91 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Com.Garment.Shipping.ETL.Service
 {
-
     public class AutomationETL
     {
+        private readonly ILogingETLService _logingETLService;
         private readonly IGShippingExportService _gShippingExportService;
         private readonly IGShippingLocalService _gShippingLocalService;
-        private readonly ILogingETLService _loggingETLService;
+
         public AutomationETL(
+            ILogingETLService logingETLService,
             IGShippingExportService gShippingExportService,
-            IGShippingLocalService gshippingLocalService,
-            ILogingETLService logingETLService)
+            IGShippingLocalService gShippingLocalService
+        )
         {
+            _logingETLService = logingETLService;
             _gShippingExportService = gShippingExportService;
-            _gShippingLocalService = gshippingLocalService;
-            _loggingETLService = logingETLService;
+            _gShippingLocalService = gShippingLocalService;
         }
 
-        [FunctionName("automation-etl")]
-        public async Task<IActionResult> Run([TimerTrigger("0 20 14 1/1 * ? *")]TimerInfo myTimer, ILogger log)
+        [FunctionName("automation-etl-batch-1")]
+        public async Task AutomationETLBatch1([TimerTrigger("0 0 12 1/1 * ? *")]TimerInfo myTimer, ILogger log)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
 
             try
             {
-                //Get and Insert to Export
+                await RunETL();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [FunctionName("automation-etl-batch-2")]
+        public async Task AutomationETLBatch2([TimerTrigger("0 0 20 1/1 * ? *")] TimerInfo myTimer, ILogger log)
+        {
+            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+
+            try
+            {
+                await RunETL();
+            }
+            catch (Exception ex)
+            {
+                await GenerateLoging(false);
+                throw ex;
+            }
+        }
+
+        public async Task GenerateLoging(bool status)
+        {
+            var data = new LogingETLModel(
+                0,
+                "Garment Shipping",
+                DateTime.Now,
+                "SYSTEM",
+                status
+            );
+
+            await _logingETLService.Save(data);
+        }
+
+        public async Task RunETL()
+        {
+            try
+            {
                 var result = await _gShippingExportService.Get();
-
                 await _gShippingExportService.ClearData(result);
-
                 await _gShippingExportService.Save(result);
 
-                //Get and Insert to Local
                 var resultLocal = await _gShippingLocalService.Get();
-
-                await _gShippingLocalService.ClearData(resultLocal);
-
-                var listDataLocal = new List<GShippingLocalModel>();
-
+                await _gShippingLocalService.Save(resultLocal);
                 await _gShippingLocalService.Save(resultLocal);
 
-                //var loggingExportData = new LogingETLModel(
-                //    data.Id,
-                //    data.DataArea,
-                //    DateTime.Now,
-                //    tokenPayload.GetUsername(),
-                //    true
-                //);
-
-                //await _loggingETLService.Update(loggingExportData);
-
-                return new OkObjectResult(new { message = "success" });
+                await GenerateLoging(true);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
-                //var loggingExportData = new LogingETLModel(
-                //    data.Id,
-                //    data.DataArea,
-                //    DateTime.Now,
-                //    tokenPayload.GetUsername(),
-                //    false
-                //);
-
-                //await _loggingETLService.Update(loggingExportData);
-
-                return new BadRequestObjectResult(new { message = "Bad Request", info = Ex.Message });
+                await GenerateLoging(false);
+                throw ex;
             }
+
         }
     }
 }

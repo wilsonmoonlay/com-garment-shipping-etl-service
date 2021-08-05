@@ -35,7 +35,7 @@ namespace Com.Garment.Shipping.ETL.Service
                 {
                     return new SqlDataContext<LogingETLModel>(connectionStringOrigin, connectionStringDestination);
                 });
-            
+
             builder.Services.AddTransient<IGShippingLocalAdapter, GShippingLocalAdapter>()
                 .AddTransient<IGShippingExportAdapter, GShippingExportAdapter>()
                 .AddTransient<ILogingETLAdapter, LogingETLAdapter>()
@@ -43,8 +43,7 @@ namespace Com.Garment.Shipping.ETL.Service
                 .AddTransient<IGShippingExportService, GShippingExportService>()
                 .AddTransient<IGShippingLocalService, GShippingLocalService>()
                 .AddTransient<ILogingDWHService, LogingDWHService>()
-                .AddTransient<ILogingETLService, LogingETLService>()
-                .AddTransient<IETLService, ETLService>();
+                .AddTransient<ILogingETLService, LogingETLService>();
         }
     }
 }

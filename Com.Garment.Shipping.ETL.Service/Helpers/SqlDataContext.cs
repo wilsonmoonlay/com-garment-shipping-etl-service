@@ -3,12 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Com.Garment.Shipping.ETL.Service.Helpers
 
 {
+    [ExcludeFromCodeCoverage]
     public class SqlDataContext<TModel> : ISqlDataContext<TModel>
     {
 

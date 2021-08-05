@@ -17,12 +17,15 @@ namespace Com.Garment.Shipping.ETL.Service
     {
         private readonly IGShippingExportService _gShippingExportService;
         private readonly IGShippingLocalService _gShippingLocalService;
+        private readonly ILogingETLService _loggingETLService;
         public ManualETL(
             IGShippingExportService gShippingExportService,
-            IGShippingLocalService gshippingLocalService)
+            IGShippingLocalService gshippingLocalService,
+            ILogingETLService logingETLService)
         {
             _gShippingExportService = gShippingExportService;
             _gShippingLocalService = gshippingLocalService;
+            _loggingETLService = logingETLService;
         }
 
         [FunctionName("manual-etl")]
@@ -30,28 +33,19 @@ namespace Com.Garment.Shipping.ETL.Service
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
-
-            string name = req.Query["name"];
+            string token = req.Headers["Authorization"];
+            if (token == null) {
+                return new BadRequestObjectResult(new {message ="Failed! token empty"});
+            }
+            var tokenPayload = new TokenPayloadExtractorService(token);
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
+            var data = JsonConvert.DeserializeObject<LogingETLModel>(requestBody);
 
-            string responseMessage = string.IsNullOrEmpty(name)
-                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"Hello, {name}. This HTTP triggered function executed successfully.";
             try
             {
                 //Get and Insert to Export
                 var result = await _gShippingExportService.Get();
-
-                //var listData = new List<GShippingExportModel>();
-                //foreach (var exportData in result)
-                //{
-                //    listData.Add(new GShippingExportModel(
-                //        exportData.IdPackingLists, exportData.InvoiceNo, exportData.TruckingDate, exportData.BuyerAgentCode, exportData.BuyerAgentName, exportData.Destination, exportData.SectionCode, exportData.PackingListId, exportData.IdShippingInvoice, exportData.GarmentShippingInvoiceId, exportData.BuyerBrandName, exportData.ComodityCode, exportData.ComodityName, exportData.UnitCode, exportData.Quantity, exportData.UomUnit, exportData.CMTPrice, exportData.Amount));
-                //}
 
                 await _gShippingExportService.ClearData(result);
 
@@ -63,20 +57,34 @@ namespace Com.Garment.Shipping.ETL.Service
                 await _gShippingLocalService.ClearData(resultLocal);
 
                 var listDataLocal = new List<GShippingLocalModel>();
-                //foreach (var localData in resultLocal)
-                //{
-                //    listDataLocal.Add(new GShippingLocalModel(
-                //        localData.Id, localData.NoteNo, localData.Date, localData.BuyerCode, localData.BuyerName, localData.LocalSalesNoteId, localData.Quantity, localData.UomUnit, localData.Price, localData.Amount
-                //        ));
-                //}
 
                 await _gShippingLocalService.Save(resultLocal);
+                
+                var loggingExportData = new LogingETLModel(
+                    data.Id,
+                    data.DataArea,
+                    DateTime.Now,
+                    tokenPayload.GetUsername(),
+                    true
+                );
+             
+                await _loggingETLService.Update(loggingExportData);
 
-                return new OkObjectResult("Success");
+                return new OkObjectResult(new { message = "success" });
             }
             catch (Exception Ex)
             {
-                throw Ex;
+                var loggingExportData = new LogingETLModel(
+                    data.Id,
+                    data.DataArea,
+                    DateTime.Now,
+                    tokenPayload.GetUsername(),
+                    false
+                );
+             
+                await _loggingETLService.Update(loggingExportData);
+                
+                return new BadRequestObjectResult(new {message ="Bad Request", info = Ex.Message});
             }
         }
     }

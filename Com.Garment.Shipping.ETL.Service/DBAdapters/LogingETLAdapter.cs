@@ -77,6 +77,16 @@ namespace Com.Garment.Shipping.ETL.Service.DBAdapters
                 throw ex;
             }
         }
+
+        public async Task Update(LogingETLModel model)
+        {
+            try{
+                var query = $"Update [GDashboardLogETL] set [DataArea]=@DataArea ,[UpdatedAt]=@UpdatedAt ,[UpdatedBy]=@UpdatedBy ,[Status]=@Status WHERE [Id]=@Id";
+                var result = await context.ExecuteAsync(query, model);
+            }catch(Exception ex){
+                throw ex;
+            }
+        }
     }
 
 
@@ -84,6 +94,7 @@ namespace Com.Garment.Shipping.ETL.Service.DBAdapters
     {        
         Task<IEnumerable<LogingETLModel>> Get(int size, int page, string keyword, string order);
         Task Save(LogingETLModel model);
+        Task Update(LogingETLModel model);
         Task<int> CountAll();
     }
 }

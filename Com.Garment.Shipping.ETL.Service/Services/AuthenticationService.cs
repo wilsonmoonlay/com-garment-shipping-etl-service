@@ -6,9 +6,11 @@ using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using System.Globalization;
 using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Com.Garment.Shipping.ETL.Service.Services
 {
+    [ExcludeFromCodeCoverage]
     public class AuthenticationService
     {
         static string AUTH_URL = Environment.GetEnvironmentVariable("AUTH_URL", EnvironmentVariableTarget.Process);

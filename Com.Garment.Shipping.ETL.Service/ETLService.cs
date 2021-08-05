@@ -79,14 +79,13 @@ namespace Com.Garment.Shipping.ETL.Service
         
 
         public async Task CrateETLLog(string token, string area, bool status){            
-            // var tokenPayload = new TokenPayloadExtractorService(token);
+            var tokenPayload = new TokenPayloadExtractorService(token);
 
             var data = new LogingETLModel(
                 0,
                 area,
                 DateTime.Now,
-                // tokenPayload.getUsername(),
-                "tes",
+                tokenPayload.GetUsername(),
                 status
             );
              

@@ -4,10 +4,10 @@ namespace Com.Garment.Shipping.ETL.Service.ViewModels
 {
     public class LoggingETLOrderViewModel
     {
-        public int? ID;
+        public string? ID;
         public string? DataArea;
-        public DateTime? UpdatedAt;
+        public string? UpdatedAt;
         public string? UpdatedBy;
-        public bool? Status;
+        public string? Status;
     }
 }

@@ -41,12 +41,22 @@ namespace Com.Garment.Shipping.ETL.Service.Services
                 throw ex;
             }
         }
+
+        public async Task Update(LogingETLModel data)
+        {
+            try{
+                await _logingETLAdapter.Update(data);
+            }catch(Exception ex){
+                throw ex;
+            }
+        }
     }
 
     public interface ILogingETLService
     {
         Task<IEnumerable<LogingETLModel>> Get(int size, int page, string keyword, string order);
-        Task Save(LogingETLModel data);      
+        Task Save(LogingETLModel data); 
+        Task Update(LogingETLModel data);      
         Task<int> CountAll();  
     }
 }

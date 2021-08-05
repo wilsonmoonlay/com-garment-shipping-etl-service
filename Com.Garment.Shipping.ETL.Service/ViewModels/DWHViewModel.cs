@@ -1,8 +1,10 @@
 using Newtonsoft.Json;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Com.Garment.Shipping.ETL.Service.ViewModels
 {
+    [ExcludeFromCodeCoverage]
     public class Sku
     {
         [JsonProperty("name")]
@@ -14,7 +16,7 @@ namespace Com.Garment.Shipping.ETL.Service.ViewModels
         [JsonProperty("capacity")]
         public int Capacity { get; set; }
     }
-
+    [ExcludeFromCodeCoverage]
     public class CurrentSku
     {
         [JsonProperty("name")]
@@ -26,7 +28,7 @@ namespace Com.Garment.Shipping.ETL.Service.ViewModels
         [JsonProperty("capacity")]
         public int Capacity { get; set; }
     }
-
+    [ExcludeFromCodeCoverage]
     public class Properties
     {
         [JsonProperty("collation")]
@@ -68,7 +70,7 @@ namespace Com.Garment.Shipping.ETL.Service.ViewModels
         [JsonProperty("maintenanceConfigurationId")]
         public string MaintenanceConfigurationId { get; set; }
     }
-
+    [ExcludeFromCodeCoverage]
     public class DWHViewModel
     {
         [JsonProperty("sku")]

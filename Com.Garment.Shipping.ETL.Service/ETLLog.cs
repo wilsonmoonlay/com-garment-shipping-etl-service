@@ -26,6 +26,8 @@ namespace Com.Garment.Shipping.ETL.Service
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
+            req.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+
             int page;
             int size;
             var pageExtract = int.TryParse(req.Query["page"], out page);
@@ -54,7 +56,7 @@ namespace Com.Garment.Shipping.ETL.Service
             }
 
 
-            return new OkObjectResult("OK");
+            return new BadRequestObjectResult(new {message = "Failed"});
         }
     }
 }

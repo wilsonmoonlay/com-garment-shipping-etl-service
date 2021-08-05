@@ -3,12 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Com.Garment.Shipping.ETL.Service.Helpers
 
 {
+    [ExcludeFromCodeCoverage]
     public class SqlDataContext<TModel> : ISqlDataContext<TModel>
     {
 
@@ -62,7 +64,7 @@ namespace Com.Garment.Shipping.ETL.Service.Helpers
             if(_connectionOrigin.State == ConnectionState.Open)
                 _connectionOrigin.Close();
             return result;
-        }
+            }
 
         public async Task<int> ExecuteAsyncTruncate(string query)
         {

@@ -5,9 +5,11 @@ using System.Net.Http.Headers;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using Com.Garment.Shipping.ETL.Service.ViewModels;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Com.Garment.Shipping.ETL.Service.Services
 {
+    [ExcludeFromCodeCoverage]
     public class DWHService
     {
         static string RESOURCE_URL = Environment.GetEnvironmentVariable("RESOURCE_URL", EnvironmentVariableTarget.Process);

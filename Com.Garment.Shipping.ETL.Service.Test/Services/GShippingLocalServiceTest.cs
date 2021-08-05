@@ -74,5 +74,25 @@ namespace Com.Garment.Shipping.ETL.Service.Test.Services
             var result = await service.Get();
             Assert.True(result.Count() > 0);
         }
+
+        [Fact]
+        public async Task ClearDataSuccess()
+        {
+
+            var sqlDataContext = new Mock<ISqlDataContext<GShippingLocalModel>>();
+            var serviceProvider = new Mock<IServiceProvider>();
+
+
+            sqlDataContext.Setup(x => x.ExecuteAsync(It.IsAny<string>(), It.IsAny<GShippingLocalModel>())).ReturnsAsync(1);
+            sqlDataContext.Setup(x => x.QueryAsync(It.IsAny<string>())).ReturnsAsync(new List<GShippingLocalModel>());
+            serviceProvider.Setup(x => x.GetService(typeof(ISqlDataContext<GShippingLocalModel>))).Returns(sqlDataContext.Object);
+            serviceProvider.Setup(x => x.GetService(typeof(IGShippingLocalAdapter))).Returns(new GShippingLocalAdapter(serviceProvider.Object));
+
+            var data = GenerateModel();
+
+            GShippingLocalService service = new GShippingLocalService(serviceProvider.Object);
+            await service.ClearData(data);
+            Assert.True(true);
+        }
     }
 }

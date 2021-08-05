@@ -33,6 +33,8 @@ namespace Com.Garment.Shipping.ETL.Service
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
+            req.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+            
             string token = req.Headers["Authorization"];
             if (token == null) {
                 return new BadRequestObjectResult(new {message ="Failed! token empty"});
@@ -83,7 +85,7 @@ namespace Com.Garment.Shipping.ETL.Service
                 );
              
                 await _loggingETLService.Update(loggingExportData);
-                
+
                 return new BadRequestObjectResult(new {message ="Bad Request", info = Ex.Message});
             }
         }

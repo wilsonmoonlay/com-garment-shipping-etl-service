@@ -8,6 +8,7 @@ using Moq;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Net.Http;
 using System.Text;
@@ -29,17 +30,26 @@ namespace Com.Garment.Shipping.ETL.Service.Test.Services
             var request = new Mock<HttpRequest>();
             request.Setup(x => x.Query["name"]).Returns("Test");
             request.Setup(x => x.Body).Returns(ms);
+            request.Setup(x => x.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*"));
+            request.Setup(x => x.Headers["Authorization"]).Returns(new Microsoft.Extensions.Primitives.StringValues("1000"));
+
+            var tokenPayload = new Mock<TokenPayloadExtractorService>();
             
+            var mockJwt = new Mock<JwtSecurityTokenHandler>();
             
-            var serviceProvider = new Mock<IServiceProvider>();
 
             var mockShippingExport = new Mock<IGShippingExportService>();
             var mockShippingLocal = new Mock<IGShippingLocalService>();
 
+            var logModel = new LogingETLModel(1, "Area", new DateTime(), "Test", true);
 
-            ManualETL service = new ManualETL(mockShippingExport.Object,mockShippingLocal.Object);
+            var mockLogging = new Mock<ILogingETLService>();
+            mockLogging.Setup(x => x.Update(new LogingETLModel(1, "Area", new DateTime(), "Test", true)));
 
-            var response = await service.Run(request.Object, logger.Object);
+
+            ManualETL service = new ManualETL(mockShippingExport.Object,mockShippingLocal.Object, mockLogging.Object);
+
+            var result = await service.Run(request.Object, logger.Object);
         }
     }
 }

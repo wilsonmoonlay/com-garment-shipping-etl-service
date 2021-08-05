@@ -11,7 +11,7 @@ namespace Com.Garment.Shipping.ETL.Service.Services
             this.decodedToken = handler.ReadJwtToken(token) as JwtSecurityToken;
         }
 
-        public string getUsername() {
+        public string GetUsername() {
             var username = decodedToken.Claims.First(claim => claim.Type == "username").Value;
             return username;
         }

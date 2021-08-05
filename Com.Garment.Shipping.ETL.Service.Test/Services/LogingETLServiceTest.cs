@@ -47,6 +47,25 @@ namespace Com.Garment.Shipping.ETL.Service.Test.Services
             Assert.True(true);
         }
         [Fact]
+        public async Task UpdateSuccess()
+        {
+            
+            var sqlDataContext = new Mock<ISqlDataContext<LogingETLModel>>();
+            var serviceProvider = new Mock<IServiceProvider>();
+
+            sqlDataContext.Setup(x => x.ExecuteAsync(It.IsAny<string>(), It.IsAny<LogingETLModel>())).ReturnsAsync(1);
+            sqlDataContext.Setup(x => x.QueryAsync(It.IsAny<string>())).ReturnsAsync(new List<LogingETLModel>());
+            serviceProvider.Setup(x => x.GetService(typeof(ISqlDataContext<LogingETLModel>))).Returns(sqlDataContext.Object);
+            serviceProvider.Setup(x => x.GetService(typeof(ILogingETLAdapter))).Returns(new LogingETLAdapter(serviceProvider.Object));
+
+            var model = GenerateModel();
+
+            LogingETLService service = new LogingETLService(serviceProvider.Object);
+            await service.Update(model);
+            Assert.True(true);
+        }
+        
+        [Fact]
         public async Task GetSuccess()
         {
 

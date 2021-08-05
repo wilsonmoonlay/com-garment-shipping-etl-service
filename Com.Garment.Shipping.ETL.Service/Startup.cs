@@ -5,10 +5,12 @@ using Com.Garment.Shipping.ETL.Service.DBAdapters;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Com.Garment.Shipping.ETL.Service.Services;
+using System.Diagnostics.CodeAnalysis;
 
 [assembly: FunctionsStartup(typeof(Com.Garment.Shipping.ETL.Service.Startup))]
 namespace Com.Garment.Shipping.ETL.Service
 {
+    [ExcludeFromCodeCoverage]
     public class Startup : FunctionsStartup
     {        
         private readonly string connectionStringOrigin = Environment.GetEnvironmentVariable("ConnectionStrings:SQLConnectionStringOrigin", EnvironmentVariableTarget.Process);

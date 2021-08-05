@@ -62,7 +62,7 @@ namespace Com.Garment.Shipping.ETL.Service.Helpers
             if(_connectionOrigin.State == ConnectionState.Open)
                 _connectionOrigin.Close();
             return result;
-        }
+            }
 
         public async Task<int> ExecuteAsyncTruncate(string query)
         {

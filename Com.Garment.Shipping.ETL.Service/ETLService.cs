@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Com.Garment.Shipping.ETL.Service.Models;
 using Com.Garment.Shipping.ETL.Service.Services;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Com.Garment.Shipping.ETL.Service
 {
+    [ExcludeFromCodeCoverage]
     public class ETLService : IETLService
     {
         private readonly ILogingETLService _logingETLService;
